@@ -1,32 +1,17 @@
-'use strict'
+"use strict";
+const express = require('express');
+const getVideos = require('./services/notion');
+const PORT = process.env.PORT || 5000;
 
-const dotenv = require('dotenv').config();
-const {Client} = require('@notionhq/client');
+const app = express();
 
+app.use(express.static('public'));
 
-const DATABASE = process.env.NOTION_DATABASE_ID;
-
-
-// Init client
-const notion = new Client({
-  auth: process.env.NOTION_TOKEN
+app.get('/schedule', async (req, res) =>{
+  const schedule = await getVideos();
+  res.json(schedule);
 })
 
-const getVideos = async () => {
-  const payload = {
-    path: `databases/${DATABASE}/query`,
-    method: 'POST'
-  }
-
-  const {results} = await notion.request(payload);
-
-  const schedule = results.map((page)=>{
-    console.log(page.properties.Description)
-  })
-
-  console.log(results);
-}
-
-getVideos();
+app.listen(PORT, console.log(`Server started on port ${PORT}`));
 
 
