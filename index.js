@@ -1,6 +1,6 @@
 "use strict";
 const express = require('express');
-const getVideos = require('./services/notion');
+const getVideos = require('./services/notion.js');
 const PORT = process.env.PORT || 5000;
 
 const app = express();
